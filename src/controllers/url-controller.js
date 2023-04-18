@@ -15,7 +15,7 @@ const getUrl = async (req, res) => {
 const createUrl = async (req, res) => {
     try {
       const url = await urlService.createURL(req.body.original_url);
-      return res.status(200),json({
+      return res.status(200).json({
         data:url,
         success:true,
         err:{}

@@ -7,16 +7,22 @@ class UrlService{
         this.urlRepository = new UrlRepository();
     }
 
-    async createURL(data){
+    async createURL(data) {
         try {
+          const urlExistsFlag = await this.urlRepository.urlExists(data);
+          if (urlExistsFlag) {
+            return urlExistsFlag;
+          } else {
             const shorturl = shortid.generate();
-            const createPayload = { data , shorturl};
-            const url = this.urlRepository.create(createPayload);
+            const createPayload = { data, shorturl };
+            const url = await this.urlRepository.create(createPayload);
             return url;
+          }
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
-    }
+      }
+      
 }
 
 module.exports = UrlService ;

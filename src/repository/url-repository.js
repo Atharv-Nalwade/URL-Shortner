@@ -11,6 +11,19 @@ class UrlRepository{
             console.log(error);
         }
     }
+
+    async urlExists(UrlData) {
+        try {
+          let urlExistsFlag = await URL.findOne({ longUrl: UrlData });
+          if (urlExistsFlag === null) {
+            return false; // URL does not exist
+          } else {
+            return true; // URL exists
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
 }
 
 module.exports = UrlRepository ;

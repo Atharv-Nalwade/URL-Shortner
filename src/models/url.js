@@ -9,7 +9,8 @@ const URL_SCHEMA = mongoose.Schema({
         type:String,
     },
     clicks:{
-        type:Number
+        type:Number,
+        default: 0
     }
 })
 
