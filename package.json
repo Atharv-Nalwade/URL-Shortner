@@ -13,6 +13,7 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
+    "is-url": "^1.2.4",
     "mongoose": "^7.0.4",
     "nanoid": "^4.0.2",
     "nodemon": "^2.0.22",

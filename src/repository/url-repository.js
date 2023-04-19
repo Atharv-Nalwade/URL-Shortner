@@ -2,6 +2,20 @@ const URL = require('../models/url');
 
 class UrlRepository{
 
+    async getUrl(data){
+      try {
+        const url = await URL.findOne({ shortURL : data });
+        console.log(url);
+         if(url !== null){
+          return url;
+         }else{
+           return "Wrong URL" ;
+         }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     async create(data){
         try {
             data = { longUrl : data.data, shortURL: data.shorturl} ;

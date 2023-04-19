@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 const urlController = require('./controllers/url-controller');
 
-app.get('/urlShorten',urlController.getUrl);
+app.get('/:code',urlController.getUrl);
 app.post('/urlShorten',urlController.createUrl);
 
 

@@ -5,7 +5,11 @@ const urlService = new UrlService();
 
 const getUrl = async (req, res) => {
     try {
-      console.log(req.body.original_url);
+      const requestUrl = 'localhost:3000/'+req.params.code; 
+      const url = await urlService.getUrl(requestUrl);
+      const originalURL = url.longUrl ;
+      return res.redirect(originalURL);
+      
     } catch (error) {
       console.log(error);
       res.status(500).send('Internal Server Error');
