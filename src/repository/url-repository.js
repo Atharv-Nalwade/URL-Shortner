@@ -17,6 +17,19 @@ class UrlRepository{
       }
     }
 
+    async getFromLongURL(data){
+      try {
+        const url = await URL.findOne({ longUrl : data });
+         if(url !== null){
+          return url;
+         }else{
+           return "Wrong URL" ;
+         }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     async create(data){
         try {
             data = { longUrl : data.data, shortURL: data.shorturl} ;

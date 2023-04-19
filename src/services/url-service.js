@@ -12,8 +12,11 @@ class UrlService{
     async getUrl(data){
       try {
         const url = await this.urlRepository.getUrl(data);
-        if(url!='Wrong URL ') return url;
-         else return "Wrong URL Entered"
+        if(url!='Wrong URL '){ 
+          return url;
+        }else { 
+          return "Wrong URL Entered" ;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -24,8 +27,8 @@ class UrlService{
         try {
           const urlExistsFlag = await this.urlRepository.urlExists(data);
           if (urlExistsFlag) {
-            console.log(urlExistsFlag);
-            return urlExistsFlag;
+            const ExistingUrl = await this.urlRepository.getFromLongURL(data);
+            return ExistingUrl.shortURL;
           } else {
             if( isUrl(data) ){
               let shortenUrl = shortid.generate();
