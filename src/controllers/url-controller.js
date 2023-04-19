@@ -7,9 +7,15 @@ const getUrl = async (req, res) => {
     try {
       const requestUrl = 'localhost:3000/'+req.params.code; 
       const url = await urlService.getUrl(requestUrl);
-      const originalURL = url.longUrl ;
-      return res.redirect(originalURL);
-      
+      if( url!='Wrong URL'){
+            const originalURL = url.longUrl ;
+            return res.redirect(originalURL);
+      }else{
+            res.status(404).json({
+              data: "Wrong URL",
+              success:false
+            });
+      }
     } catch (error) {
       console.log(error);
       res.status(500).send('Internal Server Error');

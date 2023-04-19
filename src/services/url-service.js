@@ -12,16 +12,19 @@ class UrlService{
     async getUrl(data){
       try {
         const url = await this.urlRepository.getUrl(data);
-        return url;
+        if(url!='Wrong URL ') return url;
+         else return "Wrong URL Entered"
       } catch (error) {
         console.log(error);
       }
     }
 
+  
     async createURL(data) {
         try {
           const urlExistsFlag = await this.urlRepository.urlExists(data);
           if (urlExistsFlag) {
+            console.log(urlExistsFlag);
             return urlExistsFlag;
           } else {
             if( isUrl(data) ){
