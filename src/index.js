@@ -4,15 +4,13 @@ const bodyParser = require('body-parser');
 const app = express();
 
 const connect = require('./configs/database');
+const urlController = require('./controllers/url-controller');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-const urlController = require('./controllers/url-controller');
-
 app.get('/:code',urlController.getUrl);
 app.post('/urlShorten',urlController.createUrl);
-
 
 app.listen('3000',async () => {
     console.log("Started on port 3000");

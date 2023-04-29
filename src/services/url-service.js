@@ -12,12 +12,12 @@ class UrlService{
     async getUrl(data){
       try {
         const url = await this.urlRepository.getUrl(data);
-        if(url!='Wrong URL '){ 
+        if( url!='Wrong URL' ){ 
           return url;
         }else { 
           return "Wrong URL Entered" ;
         }
-      } catch (error) {
+      } catch( error ) {
         console.log(error);
       }
     }

@@ -5,7 +5,6 @@ class UrlRepository{
     async getUrl(data){
       try {
         const url = await URL.findOne({ shortURL : data });
-        // console.log(url);
          if(url !== null){
           await URL.findOneAndUpdate({shortURL:data}, {$inc:{clicks:1}});
           return url;
