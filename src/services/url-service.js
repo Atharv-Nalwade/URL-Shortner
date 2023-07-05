@@ -21,7 +21,7 @@ class UrlService {
     }
   }
 
-  async createURL(data) {
+  async createURL(data,options='None') {
     try {
       const urlExistsFlag = await this.urlRepository.urlExists(data);
       if (urlExistsFlag) {
@@ -31,7 +31,8 @@ class UrlService {
         if (isUrl(data)) {
           let shortenUrl = shortid.generate();
           let shorturl = "localhost:3000/" + shortenUrl;
-          const createPayload = { data, shorturl };
+          const createPayload = { data, shorturl,options };
+          console.log(createPayload);
           const url = await this.urlRepository.create(createPayload);
           return url;
         } else {

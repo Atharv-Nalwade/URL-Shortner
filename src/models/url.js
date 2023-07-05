@@ -8,6 +8,9 @@ const URL_SCHEMA = mongoose.Schema({
     shortURL:{
         type:String,
     },
+    options:{
+        type:String,        
+    },
     clicks:{
         type:Number,
         default: 0

@@ -30,7 +30,7 @@ class UrlRepository {
 
   async create(data) {
     try {
-      data = { longUrl: data.data, shortURL: data.shorturl };
+      data = { longUrl: data.data, shortURL: data.shorturl,options:data.options };
       const url = await URL.create(data);
       return url;
     } catch (error) {
