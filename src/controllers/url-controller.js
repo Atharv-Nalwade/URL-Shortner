@@ -24,6 +24,9 @@ const getUrl = async (req, res) => {
 
 const createUrl = async (req, res) => {
   try {
+    // Original Url is teh url which is to be shortened
+    // options field is the custom url(Custom name) which the user wants to use
+    // options field is optional and its default value is None else it is the custom name
     const url = await urlService.createURL(req.body.original_url,req.body.options);
     return res.status(200).json({
       data: url,

@@ -21,17 +21,24 @@ class UrlService {
     }
   }
 
-  async createURL(data,options='None') {
+  async createURL(data, options = "None") {
     try {
-      const urlExistsFlag = await this.urlRepository.urlExists(data);
+      const urlExistsFlag = await this.urlRepository.urlExists(data); // Check if URL already exists
       if (urlExistsFlag) {
+        // If URL exists, return the short URL which has alreadt been made
         const ExistingUrl = await this.urlRepository.getFromLongURL(data);
         return ExistingUrl.shortURL;
       } else {
+        // If URL does not exist, create a new short URL
         if (isUrl(data)) {
-          let shortenUrl = shortid.generate();
-          let shorturl = "localhost:3000/" + shortenUrl;
-          const createPayload = { data, shorturl,options };
+          let shorturl;
+          if (options === "None") {
+            let shortenUrl = shortid.generate();
+            shorturl = "localhost:3000/" + shortenUrl;
+          } else {
+            shorturl = "localhost:3000/" + options;
+          }
+          const createPayload = { data, shorturl, options };
           console.log(createPayload);
           const url = await this.urlRepository.create(createPayload);
           return url;
