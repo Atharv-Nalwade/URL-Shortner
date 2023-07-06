@@ -3,7 +3,10 @@ const URL = require("../models/url");
 class UrlRepository {
   async getUrl(data) {
     try {
-      const url = await URL.findOne({ shortURL: data });
+      let url = await URL.findOne({ options: { $in: data } });
+      if (url == null) {
+        url = await URL.findOne({ shortURL: `localhost:3000/${data}` });
+      }
       if (url !== null) {
         await URL.findOneAndUpdate({ shortURL: data }, { $inc: { clicks: 1 } });
         return url;
@@ -81,7 +84,6 @@ class UrlRepository {
       console.log(error);
     }
   }
-  
 }
 
 module.exports = UrlRepository;

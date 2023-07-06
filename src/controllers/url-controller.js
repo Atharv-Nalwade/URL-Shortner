@@ -6,8 +6,8 @@ const urlService = new UrlService();
 
 const getUrl = async (req, res) => {
   try {
-    const requestUrl = "localhost:3000/" + req.params.code;
-    const url = await urlService.getUrl(requestUrl);
+    // const requestUrl = "localhost:3000/" + req.params.code;
+    const url = await urlService.getUrl(req.params.code);
     if (url != "Wrong URL") {
       const originalURL = url.longUrl;
       return res.redirect(originalURL);

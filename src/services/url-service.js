@@ -10,7 +10,6 @@ class UrlService {
 
   async getUrl(data) {
     try {
-      console.log("Inside getUrl data is", data);
       const url = await this.urlRepository.getUrl(data);
       if (url != "Wrong URL") {
         return url;
@@ -25,32 +24,43 @@ class UrlService {
 
   async createURL(data, options = "None") {
     try {
+      let customNameExistsFlag = false;
       const urlExistsFlag = await this.urlRepository.urlExists(data); // Check if URL already exists
-      const customNameExistsFlag = await this.urlRepository.customNameExists(
-        options
-      ); // Check if custom name already exists
+
+      if (options !== "None") {
+        customNameExistsFlag = await this.urlRepository.customNameExists(
+          options
+        ); // Check if custom name already exists
+      }
+
       if (urlExistsFlag) {
         // If URL exists, return the short URL which has already been made
         const ExistingUrl = await this.urlRepository.getFromLongURL(data);
         let sameCustomNameFlag = false;
+
         if (options !== "None" && ExistingUrl.options !== options) {
           sameCustomNameFlag = true;
           await this.urlRepository.addCustomName(ExistingUrl.longUrl, options);
         }
-        if(!sameCustomNameFlag){
+
+        if (!sameCustomNameFlag) {
           console.log("Same custom name flag is", sameCustomNameFlag);
           return ExistingUrl.shortURL;
-        }else{
+        } else {
           let shorturl = "localhost:3000/" + options;
           return shorturl;
         }
+
       } else {
+
         if (customNameExistsFlag) {
           throw new Error("Custom name already exists");
         }
+
         // If URL does not exist, create a new short URL
         if (isUrl(data)) {
           let shorturl;
+          
           if (options === "None") {
             let shortenUrl = shortid.generate();
             shorturl = "localhost:3000/" + shortenUrl;
@@ -58,13 +68,16 @@ class UrlService {
             // Custom name for the short URL
             shorturl = "localhost:3000/" + options;
           }
+          
           const createPayload = { data, shorturl, options };
           console.log(createPayload);
           const url = await this.urlRepository.create(createPayload);
           return url;
+
         } else {
           return {};
         }
+
       }
     } catch (error) {
       console.log(error);
