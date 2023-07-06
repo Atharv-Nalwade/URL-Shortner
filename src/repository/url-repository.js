@@ -30,7 +30,11 @@ class UrlRepository {
 
   async create(data) {
     try {
-      data = { longUrl: data.data, shortURL: data.shorturl,options:data.options };
+      data = {
+        longUrl: data.data,
+        shortURL: data.shorturl,
+        options: data.options,
+      };
       const url = await URL.create(data);
       return url;
     } catch (error) {
@@ -53,16 +57,31 @@ class UrlRepository {
 
   async customNameExists(customName) {
     try {
-       let customNameExistsFlag = await URL.findOne({ options: customName });
+      let customNameExistsFlag = await URL.findOne({ options: customName });
       if (customNameExistsFlag === null) {
         return false; // Custom name does not exist
-      }else{
+      } else {
         return true; // Custom name exists
       }
     } catch (error) {
       console.log(error);
     }
   }
+
+  async addCustomName(longUrl, customName) {
+    try {
+      console.log(longUrl, customName);
+      let insertedCustomName = await URL.findOneAndUpdate(
+        { longUrl: longUrl },
+        { $push: { options: { $each: [customName] } } }, // Push the customName as an array element
+        { new: true } // Return the updated document
+      );
+      console.log(insertedCustomName);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
 }
 
 module.exports = UrlRepository;

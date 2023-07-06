@@ -10,6 +10,7 @@ class UrlService {
 
   async getUrl(data) {
     try {
+      console.log("Inside getUrl data is", data);
       const url = await this.urlRepository.getUrl(data);
       if (url != "Wrong URL") {
         return url;
@@ -17,7 +18,7 @@ class UrlService {
         return "Wrong URL Entered";
       }
     } catch (error) {
-      console.log("Inside getUrl catch")
+      console.log("Inside getUrl catch");
       console.log(error);
     }
   }
@@ -25,22 +26,36 @@ class UrlService {
   async createURL(data, options = "None") {
     try {
       const urlExistsFlag = await this.urlRepository.urlExists(data); // Check if URL already exists
-      const customNameExistsFlag = await this.urlRepository.customNameExists(options); // Check if custom name already exists
+      const customNameExistsFlag = await this.urlRepository.customNameExists(
+        options
+      ); // Check if custom name already exists
       if (urlExistsFlag) {
         // If URL exists, return the short URL which has already been made
         const ExistingUrl = await this.urlRepository.getFromLongURL(data);
-        return ExistingUrl.shortURL;
+        let sameCustomNameFlag = false;
+        if (options !== "None" && ExistingUrl.options !== options) {
+          sameCustomNameFlag = true;
+          await this.urlRepository.addCustomName(ExistingUrl.longUrl, options);
+        }
+        if(!sameCustomNameFlag){
+          console.log("Same custom name flag is", sameCustomNameFlag);
+          return ExistingUrl.shortURL;
+        }else{
+          let shorturl = "localhost:3000/" + options;
+          return shorturl;
+        }
       } else {
-        if(customNameExistsFlag){
+        if (customNameExistsFlag) {
           throw new Error("Custom name already exists");
-        } 
+        }
         // If URL does not exist, create a new short URL
         if (isUrl(data)) {
           let shorturl;
           if (options === "None") {
             let shortenUrl = shortid.generate();
             shorturl = "localhost:3000/" + shortenUrl;
-          } else { // Custom name for the short URL
+          } else {
+            // Custom name for the short URL
             shorturl = "localhost:3000/" + options;
           }
           const createPayload = { data, shorturl, options };
