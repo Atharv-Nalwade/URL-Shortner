@@ -50,6 +50,19 @@ class UrlRepository {
       console.log(error);
     }
   }
+
+  async customNameExists(customName) {
+    try {
+       let customNameExistsFlag = await URL.findOne({ options: customName });
+      if (customNameExistsFlag === null) {
+        return false; // Custom name does not exist
+      }else{
+        return true; // Custom name exists
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = UrlRepository;

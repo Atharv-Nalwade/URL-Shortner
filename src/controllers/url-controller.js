@@ -1,5 +1,6 @@
 const { json } = require("body-parser");
 const UrlService = require("../services/url-service.js");
+const e = require("express");
 
 const urlService = new UrlService();
 
@@ -34,8 +35,11 @@ const createUrl = async (req, res) => {
       err: {},
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).json({
+      data: {},
+      success: false,   
+      err: error.message,
+    });
   }
 };
 
