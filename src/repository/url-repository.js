@@ -32,7 +32,7 @@ class UrlRepository {
         });
   
         console.log("Value:", value);
-        return value;
+        return JSON.parse(value);
       } else {
         let url = await URL.findOne({ options: { $in: data } });
         if (url == null) {
