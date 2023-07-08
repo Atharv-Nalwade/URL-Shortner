@@ -6,7 +6,7 @@ This is a simple URL shortener that takes a long URL and converts it into a shor
 - Implement Redis for caching to reduce response time for frequently queried URLs.
 - Custom Short URL's
 
-## Future Scope:
+# Future Scope:
 - Create a different branch and use atomic-write to handle concurrency (Sequelize handles atomic-write by default).
 - Deploy the project.
 
