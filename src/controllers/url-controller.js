@@ -8,9 +8,10 @@ const getUrl = async (req, res) => {
   try {
     // const requestUrl = "localhost:3000/" + req.params.code;
     const url = await urlService.getUrl(req.params.code);
+    // console.log(url);
     if (url != "Wrong URL") {
-      const originalURL = url.longUrl;
-      return res.redirect(originalURL);
+      // const originalURL = url
+      return res.redirect(url);
     } else {
       res.status(404).json({
         data: "Wrong URL",
