@@ -22,6 +22,20 @@ class UrlService {
     }
   }
 
+  async getStatistics(data) {
+    try {
+      if(await this.getUrl(data) !== "Wrong URL Entered"){
+      const stats = await this.urlRepository.getStatistics(data);
+      return stats;}
+      else{
+        return "Wrong URL Entered";
+      }
+    } catch (error) {
+      console.log("Inside getStatistics catch");
+      console.log(error);
+    }
+  }
+
   async createURL(data, options = "None") {
     try {
       let customNameExistsFlag = false;

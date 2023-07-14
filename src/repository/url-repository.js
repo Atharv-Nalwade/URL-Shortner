@@ -7,9 +7,7 @@ const { promisify } = require("util");
 const redisGetAsync = promisify(redisClient.get).bind(redisClient);
 
 class UrlRepository {
-
-
-   /**
+  /**
    * Retrieve the long URL associated with the given data.
    * @param {string} data - The data to retrieve the URL for.
    * @returns {Promise<string>} The long URL.
@@ -30,26 +28,32 @@ class UrlRepository {
             resolve(value);
           });
         });
-
+        console.log("Cachie hit and sending from cache", value);
         return JSON.parse(value);
       } else {
-        let url = await URL.findOne({ options: { $in: data } });
-        if (url == null) {
-          url = await URL.findOne({ shortURL: `localhost:3000/${data}` });
-        }
+      let url = await URL.findOne({ options: { $in: data } });
+      if (url == null) {
+        url = await URL.findOne({ shortURL: `localhost:3000/${data}` });
+      }
 
-        if (url !== null) {
-          await URL.findOneAndUpdate(
-            { shortURL: data },
-            { $inc: { clicks: 1 } }
-          );
-          await redisClient.set(data, JSON.stringify(url.longUrl));
-          console.log("Cache Miss, Added to Redis:", url.longUrl);
-          return url.longUrl;
-        } else {
-          console.log("Wrong URL");
-          return "Wrong URL";
-        }
+      console.log("Url is", url);
+      if (url !== null) {
+        console.log("Data is", data);
+      
+        await URL.findOneAndUpdate(
+          {
+            $or: [{ shortURL: data }, { options: { $in: [data] } }],
+          },
+          { $inc: { clicks: 1 } }
+        );
+
+        await redisClient.set(data, JSON.stringify(url.longUrl));
+        console.log("Cache Miss, Added to Redis:", url.longUrl);
+        return url.longUrl;
+      } else {
+        console.log("Wrong URL");
+        return "Wrong URL";
+      }
       }
     } catch (error) {
       console.log("Error:", error);
@@ -57,6 +61,21 @@ class UrlRepository {
     }
   }
 
+  async getStatistics(data) {
+    try {
+      const Url =
+        (await URL.findOne({ options: { $in: data } })) ||
+        (await URL.findOne({ shortURL: `localhost:3000/${data}` }));
+      const stats = {
+        createdAt: Url.createdAt,
+        clicks: Url.clicks,
+      };
+      return stats;
+    } catch (error) {
+      console.log("Inside getStatistics URL Repo catch");
+      console.log(error);
+    }
+  }
 
   /**
    * Retrieve the URL document associated with the given long URL.
@@ -76,8 +95,7 @@ class UrlRepository {
     }
   }
 
-
-    /**
+  /**
    * Create a new URL document.
    * @param {object} data - The URL data.
    * @returns {Promise<object>} The created URL document.
@@ -95,7 +113,7 @@ class UrlRepository {
       console.log(error);
     }
   }
- 
+
   /**
    * Check if a URL already exists.
    * @param {string} UrlData - The URL to check.
@@ -132,8 +150,7 @@ class UrlRepository {
     }
   }
 
-
-    /**
+  /**
    * Add a custom name to the URL document.
    * @param {string} longUrl - The long URL.
    * @param {string} customName - The custom name to add.
@@ -154,4 +171,3 @@ class UrlRepository {
 }
 
 module.exports = UrlRepository;
-

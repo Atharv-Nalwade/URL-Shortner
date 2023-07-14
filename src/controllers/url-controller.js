@@ -24,6 +24,28 @@ const getUrl = async (req, res) => {
   }
 };
 
+const getStatistics = async (req, res) => {
+  try {
+    console.log("hi");
+    console.log(req.body.code);
+    const stats = await urlService.getStatistics(req.body.code);
+    if(stats!="Wrong URL Entered"){
+      res.status(200).json({
+        data: stats,
+        success: true,
+      });
+    }else {
+      res.status(404).json({
+        data: "Wrong URL",
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 const createUrl = async (req, res) => {
   try {
     // Original Url is teh url which is to be shortened
@@ -47,4 +69,5 @@ const createUrl = async (req, res) => {
 module.exports = {
   getUrl,
   createUrl,
+  getStatistics
 };

@@ -43,6 +43,7 @@ const urlController = require('./controllers/url-controller');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/statistics', urlController.getStatistics);
 app.get('/:code', urlController.getUrl);
 app.post('/urlShorten', urlController.createUrl);
 
