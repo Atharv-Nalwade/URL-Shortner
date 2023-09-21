@@ -11,7 +11,6 @@ This is a simple URL shortener that takes a long URL and converts it into a shor
 - Deploy the project.
 
 Additional Future Scope Ideas:
-1. Custom Short URLs: Allow users to customize the generated short URLs to make them more memorable or meaningful.
 2. Analytics and Tracking: Implement a system to track the number of times each short URL is accessed, providing valuable insights into user behavior.
 3. URL Expiration: Add the option to set an expiration time for the short URLs, after which they become invalid.
 4. User Authentication: Introduce user authentication and user-specific short URL management, enabling users to manage their own created short URLs.
